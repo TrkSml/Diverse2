@@ -147,13 +147,13 @@ int find_parent_element(node *root,int index){
 
 void insert_and_replace(node *root ,int el,int position){
 
+    if(position>LENGTH_LL){
+            std::cout << "ERROR !" << "\n";
+        }
     int count=0;
     node *current;
     current=root ;
     while(count<position){
-        if(position>LENGTH_LL){
-            std::cout << "ERROR !" << "\n";
-        }
         current=current->next;
         count++;
     }
