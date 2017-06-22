@@ -65,7 +65,7 @@ void Affiche_List(node *root){
         }
     }
 
-    void affiche(node *root){
+void affiche(node *root){
     
         node *current;
         current=root ;
