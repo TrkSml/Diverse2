@@ -16,9 +16,9 @@
 #define LENGTH 20
 
 using namespace std ;
+typedef vector<int>::iterator Iter ;
 
-
-vector<int>::iterator recMin(std::vector<int>::iterator begin, std::vector<int>::iterator end, vector<int>::iterator min) // private
+Iter recMin(Iter begin, Iter end, Iter min) // private
 {
     if (begin != end)
     {
@@ -29,7 +29,7 @@ vector<int>::iterator recMin(std::vector<int>::iterator begin, std::vector<int>:
 }
 
 
-int recMinPos(vector<int> vect,vector<int>::iterator global_begin, vector<int>::iterator begin, vector<int>::iterator end, int min)
+int recMinPos(vector<int> vect,Iter global_begin, Iter begin, Iter end, int min)
 {
     if (begin != end)
     {
@@ -60,9 +60,9 @@ vector<int> Sort(vector<int> vect){
 
     if (vect.size()==1) return vect ;
 
-    vector<int>::iterator begin=vect.begin();
-    vector<int>::iterator end=vect.end();
-    vector<int>::iterator global_begin=begin;
+    Iter begin=vect.begin();
+    Iter end=vect.end();
+    Iter global_begin=begin;
 
     int min_position=recMinPos(vect,global_begin,begin,end,0);
     swap(vect.at(0),vect.at(min_position));
