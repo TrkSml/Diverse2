@@ -567,7 +567,7 @@ void diagonalTreePrint(tree* root){
 
 
 void treeLevelByLevelTwoQueues(tree* root){
-    // Print LEvel by level tree using two queues
+    // Print level by level tree using two queues
 
     std::queue<tree*> q1;
     std::queue<tree*> q2;
