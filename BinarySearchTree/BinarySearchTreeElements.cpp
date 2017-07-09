@@ -1,3 +1,10 @@
+/*
+
+Different functions which may be applied to binary search trees
+@author: Tarek Samaali
+
+*/
+
 #include <iostream>
 #include <ctime>
 #include <vector>
@@ -107,14 +114,13 @@ tree* insert_elements_user(){
 
 void printtreenode(tree *root)
     {
-
-    // if(root == NULL)
-    //   return;
+	
     if(root){
     printtreenode(root->left);
     std::cout << root->val << "\n";
     printtreenode(root->right);
         }
+	
     }
 
 vector<int> concat(vector<int> v1,vector<int> v2){
@@ -137,10 +143,11 @@ int countNodes( tree *root ) {
            count += countNodes(root->right);
            return count;
         }
-     } // end countNodes()
+     } 
 
 
 
+/* check if a node with a certain element actually exists in the tree */
 bool exists(unsigned long int el,tree *root){
 
     if(root){
@@ -377,8 +384,6 @@ void displayDependencies(tree* root){
 }
 
 
-
-/** Stand By **/
 void deleteKey(int el,tree* root){
 
     tree* node=searchNode(el,root);
