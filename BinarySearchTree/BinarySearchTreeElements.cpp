@@ -576,13 +576,15 @@ void treeLevelByLevelTwoQueues(tree* root){
 
     while(q1.size() || q2.size()){
         if(q1.front()!=root) std::cout << "\n";
+	    
         while(q1.size()){
-        tree* current;
-        current=q1.front();
-        q1.pop();
-        if(current->left) q2.push(current->left);
-        if(current->right)q2.push(current->right);
-        std::cout << current->val << " ";
+		
+          tree* current;
+          current=q1.front();
+          q1.pop();
+          if(current->left) q2.push(current->left);
+          if(current->right)q2.push(current->right);
+          std::cout << current->val << " ";
 
         }
 
@@ -590,12 +592,12 @@ void treeLevelByLevelTwoQueues(tree* root){
 
         while(q2.size()){
 
-        tree* current;
-        current=q2.front();
-        q2.pop();
-        if(current->left) q1.push(current->left);
-        if(current->right)q1.push(current->right);
-        std::cout << current->val << " ";
+          tree* current;
+          current=q2.front();
+          q2.pop();
+          if(current->left) q1.push(current->left);
+          if(current->right)q1.push(current->right);
+          std::cout << current->val << " ";
 
         }
 
