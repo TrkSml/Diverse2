@@ -70,19 +70,6 @@ void insert_element(tree* node, unsigned long int el){
     }
 
 
-
-void inorder(tree* node)
-{
-
-    if (node==NULL){ // end the recursion if node == nullptr
-    std::cout << "end" << "\n";
-       return;
-   }
-    inorder(node->left);            // display the left subtree
-    std::cout << node->val << "\n"; // display the current node
-    inorder(node->right);           // display the right subtree
-}
-
 tree* insert_elements_user(){
 
     tree* root=new tree ;
@@ -116,9 +103,9 @@ void printtreenode(tree *root)
     {
 	
     if(root){
-    printtreenode(root->left);
-    std::cout << root->val << "\n";
-    printtreenode(root->right);
+    printtreenode(root->left); // display the left node
+    std::cout << root->val << "\n"; // display the value of the current node 
+    printtreenode(root->right); // display the right node 
         }
 	
     }
