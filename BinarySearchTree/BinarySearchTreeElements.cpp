@@ -24,13 +24,6 @@ typedef struct node
     //node* prev;
 }node;
 
-// typedef struct list
-// {
-//     node* head;
-//     node* tail;
-//     //node* prev;
-// }list;
-
 using namespace std ;
 
 void insert_element(tree* node, unsigned long int el){
