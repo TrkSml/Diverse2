@@ -567,6 +567,8 @@ void diagonalTreePrint(tree* root){
 
 
 /*------  Level by Level Tree traversal and print of a Binary Search Tree ------*/
+/* We introduce three ways to perform level by level tree traversal-and-dislay */
+
 void treeLevelByLevelTwoQueues(tree* root){
     // Print LEvel by level tree using two queues
 
@@ -727,9 +729,7 @@ void print_tree( tree* tree )
 
         }
 
-
     }
-
 
     if (tree->left)
         {
@@ -825,7 +825,6 @@ void insert_element_margin(tree_margin* node, int el,int margin, int level){
     }
 
 
-
 void create_tree_with_margin(tree_margin* output_tree, tree* root,int margin, int level){
 
     if(root){
@@ -835,7 +834,6 @@ void create_tree_with_margin(tree_margin* output_tree, tree* root,int margin, in
 
 
     }
-
 }
 
 /*print tree with margin and level */
@@ -894,7 +892,6 @@ std::vector< vector<tree_margin*> > VectorLevels(tree_margin* root){
 
         if(p)
         {
-
 
             if(p->left)
             {
