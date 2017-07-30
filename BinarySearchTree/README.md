@@ -38,3 +38,34 @@ Example of a customized buffer-based printed tree:
           `--1
 
 ```
+Here's the output after balancing the previous tree ( transforming it into AVL tree) :
+```
+58
+|`--351
+|  |`--1029
+|  |  |`--2033
+|  |  |   `--3030
+|  |  |   `--1030
+|  |   `--951
+|  |      `--1000
+|  |      `--775
+|   `--77
+|     |`--90
+|     |   `--98
+|     |   `--82
+|      `--73
+|         `--75
+ `--10
+   |`--32
+   |  |`--43
+   |  |   `--58
+   |  |   `--35
+   |   `--23
+   |      `--25
+    `--3
+      |`--7
+      |   `--9
+      |   `--4
+       `--1
+          `--2
+```
