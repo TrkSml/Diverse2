@@ -1,10 +1,10 @@
 
 ## C++ Library for Binary Search Trees
 
-You may find nearly all possible functions used to explore, build, reverse and check tree-like data structres with a special 
-focus on some of the tree printing techniques using recursivity and STL features.
+You may find nearly all possible functions used to explore, build, reverse and check Binary Search Trees with a special 
+focus on some of the tree printing techniques using recursivity and a few STL features.
 
-Example of a customized buffer-based printed tree:
+An example of a customized buffer-based printed tree:
 
 ```
 
