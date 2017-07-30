@@ -21,7 +21,15 @@ typedef struct node
     int val;
     int occ;
     node* next;
+    //node* prev;
 }node;
+
+// typedef struct list
+// {
+//     node* head;
+//     node* tail;
+//     //node* prev;
+// }list;
 
 using namespace std ;
 
@@ -123,6 +131,7 @@ std::vector<int> int_to_vect(int el){
     return vectel;
 }
 
+/** count the total number of nodes in a tree **/
 int countNodes( tree *root ) {
 
         if (root == NULL)
@@ -136,7 +145,7 @@ int countNodes( tree *root ) {
      } // end countNodes()
 
 
-
+/**check if an element exists in a tree**/
 bool exists(unsigned long int el,tree *root){
 
     if(root){
@@ -316,6 +325,7 @@ typedef struct double_vect {
     return all;
         }
 
+/* store the path from root all the way down to a given value */
 vector<int> PathFinder(int aim,tree* root){
     static vector<int> path;
     if (exists(aim,root)){
@@ -567,8 +577,6 @@ void diagonalTreePrint(tree* root){
 
 
 /*------  Level by Level Tree traversal and print of a Binary Search Tree ------*/
-/* We introduce three ways to perform level by level tree traversal-and-dislay */
-
 void treeLevelByLevelTwoQueues(tree* root){
     // Print LEvel by level tree using two queues
 
@@ -676,8 +684,6 @@ void treePrintQueueCounter(tree* root){
 
 
 /******** Buffer-based Rendering Tree ***********/
-/*** please refer to the repository description ***/
-
 const int buffer_length=500;
 char depth_buffer[buffer_length];
 int depth_index=0;
@@ -729,7 +735,9 @@ void print_tree( tree* tree )
 
         }
 
+
     }
+
 
     if (tree->left)
         {
@@ -747,6 +755,7 @@ typedef struct tree_margin{
     int val;
     int margin;
     int level;
+    int AVL_indicator;
     tree_margin *left;
     tree_margin *right;
     tree_margin *parent;
@@ -776,6 +785,7 @@ void insert_element_margin(tree_margin* node, int el,int margin, int level){
             node->val=el;
             node->margin=0;
             node->level=0;
+            node->AVL_indicator=0;
             node->right=NULL;
             node->left=NULL ;
             node->parent=NULL;
@@ -794,6 +804,7 @@ void insert_element_margin(tree_margin* node, int el,int margin, int level){
                     node->left->val=el;
                     node->left->margin=margin;
                     node->left->level=level;
+                    node->AVL_indicator=0;
                     node->left->right=NULL;
                     node->left->left=NULL;
                     node->left->parent=new tree_margin ;
@@ -812,6 +823,7 @@ void insert_element_margin(tree_margin* node, int el,int margin, int level){
                     node->right->val=el;
                     node->right->margin=margin;
                     node->right->level=level;
+                    node->AVL_indicator=0;
                     node->right->right=NULL;
                     node->right->left=NULL;
                     node->right->parent=new tree_margin ;
@@ -825,6 +837,7 @@ void insert_element_margin(tree_margin* node, int el,int margin, int level){
     }
 
 
+
 void create_tree_with_margin(tree_margin* output_tree, tree* root,int margin, int level){
 
     if(root){
@@ -834,12 +847,13 @@ void create_tree_with_margin(tree_margin* output_tree, tree* root,int margin, in
 
 
     }
+
 }
 
 /*print tree with margin and level */
 void print_tree_margin(tree_margin* tree )
 {
-    std::cout << tree->val<<"|"<<tree->margin<<"|"<<tree->level<< "\n";
+    std::cout << tree->val<<"|"<<tree->margin<<"|"<<tree->level<<"|"<<tree->AVL_indicator<< "\n";
 
     if (tree->right)
     {
@@ -893,6 +907,7 @@ std::vector< vector<tree_margin*> > VectorLevels(tree_margin* root){
         if(p)
         {
 
+
             if(p->left)
             {
                  Qu.push(p->left);
@@ -943,7 +958,35 @@ void displayVectorOfVectors(vector< vector<tree_margin*> > vec){
     }
 }
 
+/******** to finish ********/
 
+
+/**** Balance a Binary Search Tree ***/
+
+tree* balance_tree(tree* root, vector<int> vector, int start,int end)
+{
+    // base case
+    if (start > end)return NULL;
+
+    /* Get the middle element and make it root */
+    int mid = (start + end)/2;
+    if(root==NULL)
+    {   root=new tree;
+        root->val=vector[mid];
+        root->left=root->right=NULL;
+    }
+
+    /* Using index in Inorder traversal, construct
+       left and right subtree */
+    root->left=balance_tree(root->left,vector, start, mid-1);
+    root->right=balance_tree(root->right,vector, mid+1, end);
+
+    return root;
+}
+
+/* Please check TreeToSortedVector() function to transform a tree into a sorted vector
+Example to use the balance_tree() function :
+balanced_root=balance_tree(balanced_root,TreeToSortedVector(root),0,TreeToSortedVector(root).size()-1); */
 
 
 int main(){
@@ -957,8 +1000,10 @@ int main(){
     sigaction(SIGINT, &act, 0);
     */
 
-    tree *root= new tree;
-    tree_margin* output_tree=new tree_margin;
+    tree *root= new tree; // ordinary Binary Search Tree
+    tree_margin* margin_root=new tree_margin; // tree with margins and levels
+    tree* balanced_root={0}; // balanced tree
+
     int margin=30;
     int level=0;
 
@@ -991,6 +1036,9 @@ int main(){
     insert_element(root,2);
     insert_element(root,1);
 
+    balanced_root=balance_tree(balanced_root,TreeToSortedVector(root),0,TreeToSortedVector(root).size()-1);
+    print_tree_margin(margin_root);
+
 
     /*
         ...
@@ -1002,7 +1050,6 @@ int main(){
         """
 
     */
-
 
 return 0;
 }
