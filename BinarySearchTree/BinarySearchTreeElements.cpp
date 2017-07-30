@@ -26,6 +26,7 @@ typedef struct node
 
 using namespace std ;
 
+/* insert one element in the tree at a time */
 void insert_element(tree* node, unsigned long int el){
 
         if(!node->val){
@@ -73,6 +74,7 @@ void insert_element(tree* node, unsigned long int el){
     }
 
 
+/* insert a continuous load of integers */
 tree* insert_elements_user(){
 
     tree* root=new tree ;
@@ -119,7 +121,7 @@ vector<int> concat(vector<int> v1,vector<int> v2){
     return v1 ;
 }
 
-std::vector<int> int_to_vect(int el){
+vector<int> int_to_vect(int el){
     std::vector<int> vectel(1,el);
     return vectel;
 }
