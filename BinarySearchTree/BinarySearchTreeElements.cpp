@@ -1,12 +1,4 @@
-/*
-
-Different functions which may be applied to binary search trees
-@author: Tarek Samaali
-
-*/
-
 #include <iostream>
-#include <ctime>
 #include <vector>
 #include <string>
 #include <signal.h>
@@ -20,6 +12,13 @@ struct tree{
     tree* left ;
     tree* parent ;
 };
+
+typedef struct node
+{
+    int val;
+    int occ;
+    node* next;
+}node;
 
 using namespace std ;
 
@@ -101,13 +100,14 @@ tree* insert_elements_user(){
 
 void printtreenode(tree *root)
     {
-	
+
+    // if(root == NULL)
+    //   return;
     if(root){
-    printtreenode(root->left); // display the left node
-    std::cout << root->val << "\n"; // display the value of the current node 
-    printtreenode(root->right); // display the right node 
+    printtreenode(root->left);
+    std::cout << root->val << "\n";
+    printtreenode(root->right);
         }
-	
     }
 
 vector<int> concat(vector<int> v1,vector<int> v2){
@@ -130,11 +130,10 @@ int countNodes( tree *root ) {
            count += countNodes(root->right);
            return count;
         }
-     } 
+     } // end countNodes()
 
 
 
-/* check if a node with a certain element actually exists in the tree */
 bool exists(unsigned long int el,tree *root){
 
     if(root){
@@ -371,6 +370,8 @@ void displayDependencies(tree* root){
 }
 
 
+
+/** Stand By **/
 void deleteKey(int el,tree* root){
 
     tree* node=searchNode(el,root);
@@ -494,6 +495,15 @@ int min_value(tree* root){
     return min_value(root->left);
 }
 
+/*
+###################################
+###################################
+      Tree Visualization
+###################################
+###################################
+
+*/
+
 void DrawTreeInorder(tree* root){
 
     const char star='*';
@@ -553,8 +563,9 @@ void diagonalTreePrint(tree* root){
 }
 
 
+/*------  Level by Level Tree traversal and print of a Binary Search Tree ------*/
 void treeLevelByLevelTwoQueues(tree* root){
-    // Print level by level tree using two queues
+    // Print LEvel by level tree using two queues
 
     std::queue<tree*> q1;
     std::queue<tree*> q2;
@@ -563,15 +574,13 @@ void treeLevelByLevelTwoQueues(tree* root){
 
     while(q1.size() || q2.size()){
         if(q1.front()!=root) std::cout << "\n";
-	    
         while(q1.size()){
-		
-          tree* current;
-          current=q1.front();
-          q1.pop();
-          if(current->left) q2.push(current->left);
-          if(current->right)q2.push(current->right);
-          std::cout << current->val << " ";
+        tree* current;
+        current=q1.front();
+        q1.pop();
+        if(current->left) q2.push(current->left);
+        if(current->right)q2.push(current->right);
+        std::cout << current->val << " ";
 
         }
 
@@ -579,12 +588,12 @@ void treeLevelByLevelTwoQueues(tree* root){
 
         while(q2.size()){
 
-          tree* current;
-          current=q2.front();
-          q2.pop();
-          if(current->left) q1.push(current->left);
-          if(current->right)q1.push(current->right);
-          std::cout << current->val << " ";
+        tree* current;
+        current=q2.front();
+        q2.pop();
+        if(current->left) q1.push(current->left);
+        if(current->right)q1.push(current->right);
+        std::cout << current->val << " ";
 
         }
 
@@ -658,6 +667,285 @@ void treePrintQueueCounter(tree* root){
       }
     }
 
+/********~~~~~~~~~~~~~***********/
+
+
+/******** Buffer-based Rendering Tree ***********/
+/*** please refer to the repository description ***/
+
+const int buffer_length=500;
+char depth_buffer[buffer_length];
+int depth_index=0;
+
+
+void push_buffer(char c )
+{
+
+    if(depth_index>=buffer_length) std::cout << "Error ! increase buffer length .. "<< "\n";
+    else {
+        depth_buffer[ depth_index++ ] = c;
+        depth_buffer[ depth_index++ ] = ' ';
+        depth_buffer[ depth_index++ ] = ' ';
+        depth_buffer[ depth_index ] = 0;
+    }
+
+}
+
+void pop_buffer( )
+{
+    depth_buffer[ depth_index -= 3 ] = 0;
+}
+
+void print_tree( tree* tree )
+{
+    std::cout << tree->val << "\n";
+
+    if (tree->right)
+    {
+        if(!tree->right->left){
+            std::cout << depth_buffer<<" `--";
+            push_buffer( ' ' );
+            print_tree( tree->right);
+            pop_buffer( );
+
+        }
+        else if(tree->right && tree->left){
+            std::cout << depth_buffer<<"|`--";
+            push_buffer( '|' );
+            print_tree( tree->right);
+            pop_buffer( );
+
+        }
+        else {
+            std::cout << depth_buffer<<" `--";
+            push_buffer( '|' );
+            print_tree( tree->right);
+            pop_buffer( );
+
+        }
+
+
+    }
+
+
+    if (tree->left)
+        {
+        std::cout << depth_buffer<<" `--";
+        push_buffer( ' ' );
+        print_tree( tree->left );
+        pop_buffer( );
+    }
+}
+
+/******** Tree Margin/Level Visualizer ***********/
+
+typedef struct tree_margin{
+
+    int val;
+    int margin;
+    int level;
+    tree_margin *left;
+    tree_margin *right;
+    tree_margin *parent;
+
+}tree_margin;
+
+int margin=0;
+int level=0;
+
+/*insert elements with both margin and level :
+While going through the tree, for each each left node the margin decreases by one
+and for each right node the margin increases by one. I both cases, when jumping to
+a child node the level increases by one. This could be useful when printing
+a straight binary search Tree like so :
+        ____5____
+       /         \
+    __2__       __10__
+   /     \     /      \
+  1      3    8        13
+
+*/
+
+void insert_element_margin(tree_margin* node, int el,int margin, int level){
+
+
+        if(!node->val){
+            node->val=el;
+            node->margin=0;
+            node->level=0;
+            node->right=NULL;
+            node->left=NULL ;
+            node->parent=NULL;
+        }
+        else {
+
+            if(el==node->val){} ;
+            if(el<node->val){
+                if (node->left){
+
+                    insert_element_margin(node->left,el,margin,level);
+                }
+                else{
+
+                    node->left=new tree_margin;
+                    node->left->val=el;
+                    node->left->margin=margin;
+                    node->left->level=level;
+                    node->left->right=NULL;
+                    node->left->left=NULL;
+                    node->left->parent=new tree_margin ;
+                    node->left->parent=node ;
+                }
+
+            }
+            else
+            {
+                if (node->right){
+
+                    insert_element_margin(node->right,el,margin,level);
+                }
+                else{
+                    node->right=new tree_margin;
+                    node->right->val=el;
+                    node->right->margin=margin;
+                    node->right->level=level;
+                    node->right->right=NULL;
+                    node->right->left=NULL;
+                    node->right->parent=new tree_margin ;
+                    node->right->parent=node ;
+
+                }
+
+            }
+        }
+
+    }
+
+
+
+void create_tree_with_margin(tree_margin* output_tree, tree* root,int margin, int level){
+
+    if(root){
+        insert_element_margin(output_tree,root->val,margin,level);
+        create_tree_with_margin(output_tree,root->right,margin+1,level+1);
+        create_tree_with_margin(output_tree,root->left,margin-1,level+1);
+
+
+    }
+
+}
+
+/*print tree with margin and level */
+void print_tree_margin(tree_margin* tree )
+{
+    std::cout << tree->val<<"|"<<tree->margin<<"|"<<tree->level<< "\n";
+
+    if (tree->right)
+    {
+        if(!tree->right->left){
+            std::cout << depth_buffer<<" `--";
+            push_buffer( ' ' );
+            print_tree_margin( tree->right);
+            pop_buffer( );
+
+        }
+        else if(tree->right && tree->left){
+            std::cout << depth_buffer<<"|`--";
+            push_buffer( '|' );
+            print_tree_margin( tree->right);
+            pop_buffer( );
+
+        }
+        else {
+            std::cout << depth_buffer<<" `--";
+            push_buffer( '|' );
+            print_tree_margin( tree->right);
+            pop_buffer( );
+
+        }
+
+    }
+
+
+    if (tree->left)
+        {
+        std::cout << depth_buffer<<" `--";
+        push_buffer( ' ' );
+        print_tree_margin( tree->left );
+        pop_buffer( );
+    }
+}
+
+/*output a vector of vectors, each one being positioned at a certain level of the tree */
+std::vector< vector<tree_margin*> > VectorLevels(tree_margin* root){
+    std::vector< vector<tree_margin*> > vectors;
+    std::queue<tree_margin*> Qu;
+    Qu.push(root);
+    Qu.push(NULL);
+
+
+    while(Qu.size()){
+        tree_margin* p;
+        vector<tree_margin*> to_add;
+        p=Qu.front();
+
+        if(p)
+        {
+
+
+            if(p->left)
+            {
+                 Qu.push(p->left);
+                 //to_add.push_back(p->left);
+            }
+
+            if(p->right)
+            {
+                 Qu.push(p->right);
+                 //to_add.push_back(p->right);
+            }
+            std::cout << p->val << " ";
+            to_add.push_back(p);
+            Qu.pop() ;
+        }
+
+        if(p==NULL){
+
+            Qu.push(NULL);
+            Qu.pop();
+
+            tree_margin* p_test ;
+            p_test=Qu.front();
+            //if(p_test) to_add.push_back(p_test);
+            if(p_test==NULL)break;
+            std::cout << "\n";
+
+            }
+
+         vectors.push_back(to_add);
+
+        }
+
+        std::cout << "\n";
+        return vectors;
+    }
+
+void displayVectorOfVectors(vector< vector<tree_margin*> > vec){
+
+    vector< vector<tree_margin*> >::iterator row;
+    vector<tree_margin*>::iterator col;
+
+    for (row = vec.begin(); row != vec.end(); row++) {
+        for (col = row->begin(); col != row->end(); col++) {
+            std::cout << (*col)->margin<< " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+
+
+
 int main(){
 
     /*
@@ -670,6 +958,10 @@ int main(){
     */
 
     tree *root= new tree;
+    tree_margin* output_tree=new tree_margin;
+    int margin=30;
+    int level=0;
+
     insert_element(root,10);
     insert_element(root,58);
     insert_element(root,25);
@@ -680,22 +972,37 @@ int main(){
     insert_element(root,98);
     insert_element(root,43);
     insert_element(root,775);
+    insert_element(root,77);
+    insert_element(root,2033);
+    insert_element(root,58);
+    insert_element(root,82);
     insert_element(root,32);
     insert_element(root,90);
     insert_element(root,73);
     insert_element(root,1029);
+    insert_element(root,351);
     insert_element(root,23);
     insert_element(root,1000);
     insert_element(root,1030);
+    insert_element(root,3030);
     insert_element(root,3);
     insert_element(root,9);
+    insert_element(root,4);
+    insert_element(root,2);
+    insert_element(root,1);
+
 
     /*
         ...
-        What you want to do
+        At your sign :p !!
         ...
 
+        """
+        print_tree( root );
+        """
+
     */
+
 
 return 0;
 }
