@@ -571,9 +571,9 @@ void diagonalTreePrint(tree* root){
 }
 
 
-/*------  Level by Level Tree traversal and print of a Binary Search Tree ------*/
+/*------  Level by Level Tree traversal and print of a Binary Search Tree (3 ways in total) ------*/
 void treeLevelByLevelTwoQueues(tree* root){
-    // Print LEvel by level tree using two queues
+    // Print level by level tree using two queues
 
     std::queue<tree*> q1;
     std::queue<tree*> q2;
@@ -610,6 +610,7 @@ void treeLevelByLevelTwoQueues(tree* root){
 }
 
 void treePrintQueueDelimeter(tree* root){
+    // Print level by level tree using a queue delimiter
 
     std::queue<tree*> Qu;
     Qu.push(root);
@@ -642,6 +643,8 @@ void treePrintQueueDelimeter(tree* root){
     }
 
 void treePrintQueueCounter(tree* root){
+    // Print level by level tree using a queue counter
+	
     std::queue<tree*> Qu;
     Qu.push(root);
     int countLevel, currentCount,current;
